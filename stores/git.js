@@ -1,4 +1,5 @@
 import { makeObservable, observable, computed } from "mobx"
+import _ from 'lodash'
 
 import { Services } from "../https/services"
 import Repos from '../constants/repos.json'
@@ -9,15 +10,19 @@ class Git {
     _selectedRepository = ''
     _commitOnDevelopData = []
     _commitByUserData = []
+    _currentDisplayedCommitter = null
 
     constructor() {
         makeObservable(this, {
             _selectedRepository: observable,
             _commitOnDevelopData: observable.shallow,
             _commitByUserData: observable.shallow,
+            _currentDisplayedCommitter: observable.shallow,
             selectedRepository: computed,
             commitOnDevelopData: computed,
-            commitByUserData: computed
+            commitByUserData: computed,
+            currentDisplayedCommitter: computed,
+            currentDisplayedCommitterDates: computed
         })
     }
 
@@ -31,8 +36,9 @@ class Git {
             this.commitOnDevelopData = results.filter(res => res.data.count > 0).map((res) => {
                 return {
                     count: res.data.count,
-                    author: res.data.value[0].author.name,
+                    author: res.data.value[0].committer.name,
                     imageUrl: res.data.value[0].committer.imageUrl,
+                    value: res.data.value,
                 }
             }).sort((a, b) => a.count - b.count)
         }).catch(() => {
@@ -49,7 +55,7 @@ class Git {
             this.commitByUserData = results.filter(res => res.data.count > 0).map((res) => {
                 return {
                     count: res.data.count,
-                    author: res.data.value[0].author.name,
+                    author: res.data.value[0].committer.name,
                     imageUrl: res.data.value[0].committer.imageUrl,
                     value: res.data.value,
                 }
@@ -86,6 +92,25 @@ class Git {
         this._commitByUserData = commitData
     }
 
+    get currentDisplayedCommitter() {
+        return this._currentDisplayedCommitter
+    }
+
+    set currentDisplayedCommitter(committer) {
+        this._currentDisplayedCommitter = committer
+    }
+
+    get currentDisplayedCommitterDates() {
+        const dates = _.uniq(this.currentDisplayedCommitter?.value.map((commit) => commit.committer.date.split("T")[0]))
+        const data = dates.map((date) => {
+            const count = this.currentDisplayedCommitter?.value.filter((commit) => commit.committer.date.startsWith(date)).length
+            return {
+                date,
+                count
+            }
+        })
+        return data
+    }
 
 }
 export default new Git();

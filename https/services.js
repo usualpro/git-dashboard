@@ -1,5 +1,6 @@
-import { AxiosInstance } from "./instance"
 import { format, subDays } from "date-fns"
+
+import { AxiosInstance } from "./instance"
 
 const commonParams = {
     ["searchCriteria.$top"]: 5000,

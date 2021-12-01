@@ -33,7 +33,12 @@ const Content = observer(
                     </thead>
                     <tbody>
                         {
-                            GitStore.commitOnDevelopData.map((user, index) => <tr key={index}>
+                            GitStore.commitOnDevelopData.map((user, index) => <tr
+                                key={index}
+                                onClick={() => {
+                                    GitStore.currentDisplayedCommitter = user
+                                }}
+                            >
                                 <td>
                                     <div className="columns">
                                         <div className="column is-1">

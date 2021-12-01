@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import 'bulma/css/bulma.min.css';
 
-import { RepoSelector, CommitOnDevelop, CommitByUser } from '../components/';
+import { RepoSelector, CommitOnDevelop, CommitByUser, Modal } from '../components/';
 
 export default function Home() {
   return (
@@ -17,6 +17,7 @@ export default function Home() {
       <div className="mb-5">
         <CommitOnDevelop />
       </div>
+      <Modal />
     </div>
   )
 }

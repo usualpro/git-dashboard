@@ -34,8 +34,12 @@ const Content = observer(
                     </thead>
                     <tbody>
                         {
-                            GitStore.commitByUserData.map((user, index) => <tr key={index}>
-                                <td>
+                            GitStore.commitByUserData.map((user, index) => <tr
+                                key={index}
+                                onClick={() => {
+                                    GitStore.currentDisplayedCommitter = user
+                                }}>
+                                <td >
                                     <div className="columns">
                                         <div className="column is-1">
                                             <figure className="image is-1by1">
